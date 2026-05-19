@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Menu Board</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="menu-board.css">
+</head>
+<body>
+
+<!-- MENU BOARD -->
+<div id="board">
+  <div class="board-frame">
+    <div class="board-corner-bl"></div>
+    <div class="board-corner-br"></div>
+
+    <div class="board-header">
+      <div id="restaurant-name">The Daily Board</div>
+      <div id="board-date"></div>
+    </div>
+
+    <div id="menu-grid"></div>
+  </div>
+</div>
+
+<!-- EDIT BUTTON -->
+<button id="admin-toggle" onclick="openAdmin()">✏&nbsp; Edit Menu</button>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeAdmin()"></div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <div class="panel-header">
+    <div class="panel-title">Edit Menu</div>
+    <button id="close-admin" onclick="closeAdmin()" title="Close">✕</button>
+  </div>
+
+  <!-- Restaurant Name -->
+  <div class="section">
+    <div class="section-label">Restaurant Name</div>
+    <div class="field">
+      <label>Name shown on the board</label>
+      <input type="text" id="rname-input" placeholder="Your Restaurant">
+    </div>
+    <button class="btn btn-ghost btn-full" onclick="saveRestaurantName()">Save Name</button>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Add / Edit Item -->
+  <div class="section">
+    <div class="section-label" id="form-section-label">Add Menu Item</div>
+    <form id="item-form" onsubmit="saveItem(event)" novalidate>
+      <div class="edit-banner">Editing item — update the fields below</div>
+      <input type="hidden" id="edit-idx">
+      <div class="field">
+        <label>Item Name *</label>
+        <input type="text" id="f-name" placeholder="e.g. Grilled Salmon" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Price *</label>
+        <input type="text" id="f-price" placeholder="e.g. $18 or 18.00" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Description (optional)</label>
+        <textarea id="f-desc" placeholder="e.g. With lemon butter &amp; seasonal vegetables"></textarea>
+      </div>
+      <button type="submit" class="btn btn-gold btn-full" id="submit-btn">+ Add to Menu</button>
+      <button type="button" class="btn btn-ghost btn-full" id="cancel-btn"
+              onclick="cancelEdit()" style="display:none; margin-top:7px;">Cancel Edit</button>
+    </form>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Today's Items -->
+  <div class="section">
+    <div class="section-label">Today's Items</div>
+    <div id="admin-item-list"></div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Clear All -->
+  <div class="section">
+    <div class="section-label">Start Fresh</div>
+    <button class="btn btn-red btn-full" onclick="clearAll()">Clear All Items for a New Day</button>
+  </div>
+</div>
+
+<script src="menu-board.js"></script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── BOARD BACKGROUND ── */
+body {
+  background-color: #1e3220;
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(255,255,255,0.015) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 70%, rgba(255,255,255,0.012) 0%, transparent 60%);
+  color: #f0ebe0;
+  font-family: 'Crimson Text', Georgia, serif;
+  min-height: 100vh;
+}
+
+/* ── MENU BOARD ── */
+#board {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+}
+
+.board-frame {
+  border: 3px solid rgba(240, 235, 224, 0.22);
+  border-radius: 4px;
+  padding: 40px 48px;
+  position: relative;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.25), 0 4px 32px rgba(0,0,0,0.4);
+}
+
+/* corner decorations */
+.board-frame::before, .board-frame::after,
+.board-corner-bl, .board-corner-br {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(240, 235, 224, 0.45);
+  border-style: solid;
+}
+.board-frame::before  { top: 8px;    left: 8px;    border-width: 2px 0 0 2px; }
+.board-frame::after   { top: 8px;    right: 8px;   border-width: 2px 2px 0 0; }
+.board-corner-bl      { bottom: 8px; left: 8px;    border-width: 0 0 2px 2px; }
+.board-corner-br      { bottom: 8px; right: 8px;   border-width: 0 2px 2px 0; }
+
+.board-header {
+  text-align: center;
+  padding-bottom: 28px;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.board-header::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0; left: 10%; right: 10%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(240,235,224,0.5) 0px,
+    rgba(240,235,224,0.5) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+#restaurant-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.1;
+  text-shadow: 2px 3px 8px rgba(0,0,0,0.5);
+}
+
+#board-date {
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  opacity: 0.65;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* ── MENU ITEMS ── */
+#menu-grid { display: flex; flex-direction: column; }
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding: 18px 0;
+  border-bottom: 1px dashed rgba(240,235,224,0.2);
+}
+.menu-item:last-child { border-bottom: none; }
+
+.item-left { flex: 1; min-width: 0; }
+
+.item-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.25rem, 3vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.item-desc {
+  font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+  opacity: 0.62;
+  font-style: italic;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.item-price {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.2rem, 2.8vw, 1.7rem);
+  font-weight: 700;
+  color: #f7d060;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  opacity: 0.45;
+  font-size: 1.2rem;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+/* ── EDIT BUTTON ── */
+#admin-toggle {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  background: rgba(247, 208, 96, 0.18);
+  border: 1px solid rgba(247, 208, 96, 0.45);
+  color: #f7d060;
+  padding: 11px 22px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  transition: background 0.2s, transform 0.1s;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+#admin-toggle:hover  { background: rgba(247, 208, 96, 0.28); }
+#admin-toggle:active { transform: scale(0.97); }
+
+/* ── ADMIN PANEL ── */
+#admin-panel {
+  position: fixed;
+  top: 0; right: 0;
+  width: min(400px, 100vw);
+  height: 100vh;
+  background: #111c11;
+  border-left: 1px solid rgba(240,235,224,0.18);
+  box-shadow: -6px 0 32px rgba(0,0,0,0.55);
+  overflow-y: auto;
+  z-index: 300;
+  padding: 24px 20px 40px;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#admin-panel.open { transform: translateX(0); }
+
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 200;
+}
+#overlay.open { display: block; }
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(240,235,224,0.15);
+}
+
+.panel-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+#close-admin {
+  background: none;
+  border: none;
+  color: #f0ebe0;
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0.55;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 3px;
+  transition: opacity 0.15s;
+}
+#close-admin:hover { opacity: 1; }
+
+/* ── PANEL SECTIONS ── */
+.section { margin-bottom: 26px; }
+
+.section-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.5;
+  margin-bottom: 10px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(240,235,224,0.12);
+  margin: 22px 0;
+}
+
+/* ── FORM FIELDS ── */
+.field { margin-bottom: 11px; }
+
+.field label {
+  display: block;
+  font-size: 0.82rem;
+  opacity: 0.65;
+  margin-bottom: 5px;
+}
+
+.field input, .field textarea {
+  width: 100%;
+  background: rgba(240,235,224,0.07);
+  border: 1px solid rgba(240,235,224,0.18);
+  color: #f0ebe0;
+  padding: 9px 11px;
+  border-radius: 4px;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.18s;
+}
+.field input:focus, .field textarea:focus {
+  border-color: rgba(247, 208, 96, 0.6);
+}
+.field textarea { resize: vertical; min-height: 58px; }
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: opacity 0.18s, transform 0.1s;
+  line-height: 1;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-full  { width: 100%; display: block; text-align: center; }
+.btn-gold  { background: #f7d060; color: #1e3220; }
+.btn-gold:hover { opacity: 0.88; }
+.btn-ghost { background: rgba(240,235,224,0.1); color: #f0ebe0; border: 1px solid rgba(240,235,224,0.22); }
+.btn-ghost:hover { background: rgba(240,235,224,0.18); }
+.btn-red   { background: rgba(210, 70, 70, 0.75); color: #fff; }
+.btn-red:hover { opacity: 0.88; }
+.btn-sm    { padding: 5px 11px; font-size: 0.84rem; }
+
+/* ── EDITING MODE ── */
+#item-form.editing {
+  background: rgba(247, 208, 96, 0.05);
+  border: 1px dashed rgba(247, 208, 96, 0.35);
+  border-radius: 6px;
+  padding: 12px;
+}
+.edit-banner {
+  display: none;
+  color: #f7d060;
+  font-size: 0.82rem;
+  font-style: italic;
+  margin-bottom: 10px;
+}
+#item-form.editing .edit-banner { display: block; }
+
+/* ── ADMIN ITEM LIST ── */
+.admin-item {
+  background: rgba(240,235,224,0.05);
+  border: 1px solid rgba(240,235,224,0.1);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 7px;
+}
+.admin-item:last-child { margin-bottom: 0; }
+
+.admin-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.admin-item-name  { font-weight: 600; font-size: 0.92rem; flex: 1; }
+.admin-item-price { color: #f7d060; font-size: 0.88rem; white-space: nowrap; }
+.admin-item-desc  { font-size: 0.78rem; opacity: 0.55; font-style: italic; margin-top: 2px; }
+.admin-item-btns  { display: flex; gap: 6px; margin-top: 8px; }
+
+.no-items-msg {
+  font-style: italic;
+  font-size: 0.88rem;
+  opacity: 0.45;
+}
